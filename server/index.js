@@ -1,9 +1,10 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const User = require("./models/User");
+
 dotenv.config();
 mongoose.connect(process.env.MONGO_URL);
-const User = require("./models/User");
 
 const app = express();
 
@@ -17,7 +18,5 @@ app.post("/user/register", async (req, res) => {
   await User.create(req.body);
   res.json({});
 });
-
-// run().catch(console.dir);
 
 app.listen("4040");
