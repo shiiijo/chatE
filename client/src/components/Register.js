@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useRef } from "react";
 
 const Register = () => {
@@ -5,8 +6,16 @@ const Register = () => {
   const email = useRef(null);
   const password = useRef(null);
 
-  const handleFormSubmit = () => {
-    console.log(name.current.value);
+  const handleFormSubmit = async () => {
+    var Fname = name.current.value;
+    var Femail = email.current.value;
+    var Fpassword = password.current.value;
+    const res = await axios.post("/user/register", {
+      Fname,
+      Femail,
+      Fpassword,
+    });
+    console.log(res);
   };
 
   return (
