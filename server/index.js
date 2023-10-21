@@ -30,23 +30,18 @@ app.post("/user/register", async (req, res) => {
     email: Femail,
     password: Fpassword,
   });
-  //to:do -- fix call back error
-  jwt.sign(
+  var token = jwt.sign(
     { userId: createdUser._id },
     process.env.JWT_PRIVATE_KEY,
-    {
-      algorithm: "RS256",
-    },
-    { expiresIn: "1h" },
-    (err, token) => {
-      if (err) {
-        res.json({
-          err,
-        });
-      }
-      res.cookie("token", token).status(201).json("ok");
-    }
+    {}
   );
+  if (token) {
+    console.log(token);
+    return res.cookie("token", token).status(201).json("ok");
+  }
+  return res.json({
+    error: "jwt error",
+  });
 });
 
 app.listen("4040");
