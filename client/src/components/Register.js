@@ -1,14 +1,12 @@
 import axios from "axios";
 import React, { useRef } from "react";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { provider, auth } from "../utils/firebase";
 
 const Register = () => {
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-
-  console.log(process.env.REACT_APP_GOOGLE_API_KEY);
 
   const handleFormSubmit = async () => {
     // var Fname = name.current.value;
@@ -23,21 +21,12 @@ const Register = () => {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
         const user = result.user;
         console.log(result);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
       });
   };
 
