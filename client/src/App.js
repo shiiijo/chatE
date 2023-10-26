@@ -1,7 +1,7 @@
 import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import axios from "axios";
-import Register from "./components/Register";
+import Header from "./components/Header";
 import ChatScreen from "./components/ChatScreen";
 import { Provider } from "react-redux";
 import store from "./utils/redux/store";
@@ -13,12 +13,12 @@ const App = () => {
   const appRouter = createBrowserRouter([
     {
       path: "/",
-      element: <Register />,
-    },
-    {
-      path: "/chat",
       element: <ChatScreen />,
     },
+    // {
+    //   path: "/chat",
+    //   element: <ChatScreen />,
+    // },
   ]);
 
   return (

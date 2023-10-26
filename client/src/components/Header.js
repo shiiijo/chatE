@@ -3,25 +3,18 @@ import React, { useRef } from "react";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { provider, auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
-import { addUser } from "..//utils/redux/userSlice";
+import { useSelector } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { addUser, removeUser } from "../utils/redux/userSlice";
 
-const Register = () => {
+const Header = () => {
   const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
 
-  const handleFormSubmit = async () => {
-    // var Fname = name.current.value;
-    // var Femail = email.current.value;
-    // var Fpassword = password.current.value;
-    // const res = await axios.post("/user/register", {
-    //   Fname,
-    //   Femail,
-    //   Fpassword,
-    // });
-    // console.log(res);
-
+  const handleSignIn = async () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
@@ -42,18 +35,48 @@ const Register = () => {
       });
   };
 
+  const handleSignOut = async () => {
+    dispatch(removeUser());
+  };
+
+  React.useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(
+          addUser({
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            phoneNumber: user.phoneNumber,
+          })
+        );
+      } else {
+        dispatch(removeUser());
+      }
+    });
+  }, []);
+
   return (
-    <div className="m-8">
+    <div className="m-8 flex">
       <button
         onClick={() => {
-          handleFormSubmit();
+          handleSignIn();
         }}
         className="block p-1 border  bg-blue-400 text-white rounded-md relative mr-0"
       >
         Chat now
       </button>
+      <button
+        onClick={() => {
+          handleSignOut();
+        }}
+        className="block p-1 border  bg-blue-400 text-white rounded-md relative mr-0"
+      >
+        Log out
+      </button>
     </div>
   );
 };
 
-export default Register;
+export default Header;
